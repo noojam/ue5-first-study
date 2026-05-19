@@ -1,0 +1,42 @@
+[
+	{
+		"file": "C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\Source\\UnrealStudy\\Private\\RotatingActor.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\.vscode\\compileCommands_UnrealStudy\\UnrealStudy.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.7\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\Source\\UnrealStudy\\Public\\RotatingActor.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\.vscode\\compileCommands_UnrealStudy\\UnrealStudy.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.7\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\Source\\UnrealStudy\\UnrealStudy.Build.cs",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\.vscode\\compileCommands_UnrealStudy\\UnrealStudy.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.7\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\Source\\UnrealStudy\\UnrealStudy.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\.vscode\\compileCommands_UnrealStudy\\UnrealStudy.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.7\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\Source\\UnrealStudy\\UnrealStudy.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\Kang\\Documents\\Unreal Projects\\UnrealStudy\\.vscode\\compileCommands_UnrealStudy\\UnrealStudy.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.7\\Engine\\Source"
+	}
+]
