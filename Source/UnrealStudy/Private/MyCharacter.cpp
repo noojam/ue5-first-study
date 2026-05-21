@@ -8,6 +8,8 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -41,6 +43,48 @@ void AMyCharacter::BeginPlay()
 		}
 	}
 	
+	GetCharacterMovement()->JumpZVelocity = JumpVelocity;
+}
+
+void AMyCharacter::Interact(const FInputActionValue& Value)
+{
+    FVector Start = CameraComp->GetComponentLocation();
+
+    FVector End = Start + CameraComp->GetForwardVector() * SpringArmComp->TargetArmLength + CameraComp->GetForwardVector() * InteractionDistanceFromPlayer;
+
+    FHitResult HitResult;
+
+    TArray<AActor*> ActorsToIgnore;
+    ActorsToIgnore.Add(this);
+
+    bool bHit =
+        UKismetSystemLibrary::SphereTraceSingle(
+            GetWorld(),
+            Start,
+            End,
+            20.f, // Sphere Radius
+            UEngineTypes::ConvertToTraceType(ECC_Visibility),
+            false,
+            ActorsToIgnore,
+            EDrawDebugTrace::ForDuration,
+            HitResult,
+            true
+        );
+
+    if (bHit)
+    {
+        AActor* HitActor = HitResult.GetActor();
+
+        if (HitActor)
+        {
+            GEngine->AddOnScreenDebugMessage(
+                -1,
+                2.f,
+                FColor::Green,
+                FString::Printf(TEXT("Hit: %s"), *HitActor->GetName())
+            );
+        }
+    }
 }
 
 void AMyCharacter::Move(const FInputActionValue& Value)
@@ -103,7 +147,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	UEnhancedInputComponent* EnhancedInputComponent = 
-	CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+	Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
 	if(EnhancedInputComponent)
 	{
@@ -114,7 +158,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		(LookAction, ETriggerEvent::Triggered, this, &AMyCharacter::Look);
 
 		EnhancedInputComponent->BindAction
-		(JumpAction, ETriggerEvent::Triggered, this, &AMyCharacter::StartJump);
+		(JumpAction, ETriggerEvent::Started, this, &AMyCharacter::StartJump);
 
 		EnhancedInputComponent->BindAction
 		(JumpAction, ETriggerEvent::Completed, this, &AMyCharacter::StopJump);
@@ -124,6 +168,9 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 		EnhancedInputComponent->BindAction
 		(SprintAction, ETriggerEvent::Completed, this, &AMyCharacter::StopSprint);
+
+		EnhancedInputComponent->BindAction
+		(InteractAction, ETriggerEvent::Started, this, &AMyCharacter::Interact);
 	}
 
 }

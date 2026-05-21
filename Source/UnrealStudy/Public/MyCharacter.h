@@ -33,6 +33,7 @@ public:
 	void StopJump(const FInputActionValue& Value);
 	void StartSprint(const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
+	void Interact(const FInputActionValue& Value);
 	float GetSprintSpeed() const { return SprintSpeed; }
 	float GetWalkSpeed() const { return WalkSpeed; }
 
@@ -58,9 +59,18 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputAction* SprintAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	class UInputAction* InteractAction;
+
 	UPROPERTY(EditAnywhere, Category = "Speed")
 	float WalkSpeed = 300.f;
 
 	UPROPERTY(EditAnywhere, Category = "Speed")
 	float SprintSpeed = 600.f;
+
+	UPROPERTY(EditAnywhere, Category = "JumpSettings")
+	float JumpVelocity = 600.f;
+
+	UPROPERTY(EditAnywhere, Category = "InteractionSettings")
+	float InteractionDistanceFromPlayer = 30.f;
 };
