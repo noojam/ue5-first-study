@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "InteractableInterface.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -46,11 +47,18 @@ void AMyCharacter::BeginPlay()
 	GetCharacterMovement()->JumpZVelocity = JumpVelocity;
 }
 
-void AMyCharacter::Interact(const FInputActionValue& Value)
+void AMyCharacter::Tick(float DeltaTime)
 {
-    FVector Start = CameraComp->GetComponentLocation();
+	Super::Tick(DeltaTime);
 
-    FVector End = Start + CameraComp->GetForwardVector() * SpringArmComp->TargetArmLength + CameraComp->GetForwardVector() * InteractionDistanceFromPlayer;
+	CheckInteractable();
+}
+
+void AMyCharacter::CheckInteractable()
+{
+	FVector Start = GetActorLocation();
+
+    FVector End = Start + GetActorForwardVector() * InteractionDistanceFromPlayer;
 
     FHitResult HitResult;
 
@@ -66,25 +74,38 @@ void AMyCharacter::Interact(const FInputActionValue& Value)
             UEngineTypes::ConvertToTraceType(ECC_Visibility),
             false,
             ActorsToIgnore,
-            EDrawDebugTrace::ForDuration,
+            EDrawDebugTrace::None,
             HitResult,
             true
         );
-
-    if (bHit)
-    {
+	if (!bHit)
+	{
+		CurrentInteractable = nullptr;
+        return;
+	}
+    
         AActor* HitActor = HitResult.GetActor();
 
-        if (HitActor)
-        {
-            GEngine->AddOnScreenDebugMessage(
-                -1,
-                2.f,
-                FColor::Green,
-                FString::Printf(TEXT("Hit: %s"), *HitActor->GetName())
-            );
-        }
-    }
+	if (!HitActor)
+	{
+		CurrentInteractable = nullptr;
+		return;
+	}
+
+
+	if(HitActor->Implements<UInteractableInterface>())
+	{
+		CurrentInteractable = HitActor;
+	}
+
+}
+
+void AMyCharacter::Interact(const FInputActionValue& Value)
+{
+		if(CurrentInteractable)
+		{
+			IInteractableInterface::Execute_Interact(CurrentInteractable,this);
+		} 
 }
 
 void AMyCharacter::Move(const FInputActionValue& Value)
@@ -134,12 +155,6 @@ void AMyCharacter::StopSprint(const FInputActionValue& Value)
 	GetCharacterMovement()->MaxWalkSpeed = GetWalkSpeed();
 }
 
-// Called every frame
-void AMyCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

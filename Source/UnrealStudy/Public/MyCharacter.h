@@ -34,6 +34,7 @@ public:
 	void StartSprint(const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
+	void CheckInteractable();
 	float GetSprintSpeed() const { return SprintSpeed; }
 	float GetWalkSpeed() const { return WalkSpeed; }
 
@@ -71,6 +72,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "JumpSettings")
 	float JumpVelocity = 600.f;
 
-	UPROPERTY(EditAnywhere, Category = "InteractionSettings")
+	UPROPERTY(EditAnywhere, Category = "Interaction Settings")
 	float InteractionDistanceFromPlayer = 30.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction Settings")
+    AActor* CurrentInteractable;
 };
