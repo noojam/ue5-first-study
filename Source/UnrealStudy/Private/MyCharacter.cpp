@@ -30,19 +30,6 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	class APlayerController* PlayerController = Cast<APlayerController>(GetController());
-
-	if(PlayerController)
-	{
-		class UEnhancedInputLocalPlayerSubsystem* Subsystem = 
-		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
-
-		if(Subsystem)
-		{
-			Subsystem->AddMappingContext(InputMapping, 0);
-		}
-	}
 	
 	GetCharacterMovement()->JumpZVelocity = JumpVelocity;
 }

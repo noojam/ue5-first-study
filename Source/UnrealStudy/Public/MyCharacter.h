@@ -45,8 +45,6 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* CameraComp;
 
-	UPROPERTY(EditAnywhere, Category = "Input")
-	class UInputMappingContext* InputMapping;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputAction* MoveAction;
