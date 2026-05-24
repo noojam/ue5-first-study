@@ -24,4 +24,7 @@ class UNREALSTUDY_API IInteractableInterface
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MyInterface")
 	void Interact(APawn* InstigatorPawn);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MyInterface")
+	FText GetInteractText() const;
 };

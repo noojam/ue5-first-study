@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "InteractionComponent.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -38,6 +39,9 @@ public:
 	float GetSprintSpeed() const { return SprintSpeed; }
 	float GetWalkSpeed() const { return WalkSpeed; }
 
+	UFUNCTION(BlueprintCallable)
+	UInteractionComponent* GetCurrentInteractionComponent() const { return InteractionComponent; }
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	class USpringArmComponent* SpringArmComp;
@@ -70,9 +74,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "JumpSettings")
 	float JumpVelocity = 600.f;
 
-	UPROPERTY(EditAnywhere, Category = "Interaction Settings")
-	float InteractionDistanceFromPlayer = 30.f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction Settings")
-    AActor* CurrentInteractable;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	TObjectPtr<UInteractionComponent> InteractionComponent;
 };

@@ -26,3 +26,8 @@ void ADoorActor::Interact_Implementation(APawn* InstigatorPawn)
     bIsOpen = !bIsOpen;
     ReceiveToggleDoor(bIsOpen);
 }
+
+FText ADoorActor::GetInteractText_Implementation() const
+{
+    return bIsOpen ? FText::FromString("Close Door") : FText::FromString("Open Door");
+}

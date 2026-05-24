@@ -24,6 +24,8 @@ AMyCharacter::AMyCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp);
 
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
+
 }
 
 // Called when the game starts or when spawned
@@ -37,62 +39,6 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	CheckInteractable();
-}
-
-void AMyCharacter::CheckInteractable()
-{
-	FVector Start = GetActorLocation();
-
-    FVector End = Start + GetActorForwardVector() * InteractionDistanceFromPlayer;
-
-    FHitResult HitResult;
-
-    TArray<AActor*> ActorsToIgnore;
-    ActorsToIgnore.Add(this);
-
-    bool bHit =
-        UKismetSystemLibrary::SphereTraceSingle(
-            GetWorld(),
-            Start,
-            End,
-            20.f, // Sphere Radius
-            UEngineTypes::ConvertToTraceType(ECC_Visibility),
-            false,
-            ActorsToIgnore,
-            EDrawDebugTrace::None,
-            HitResult,
-            true
-        );
-	if (!bHit)
-	{
-		CurrentInteractable = nullptr;
-        return;
-	}
-    
-        AActor* HitActor = HitResult.GetActor();
-
-	if (!HitActor)
-	{
-		CurrentInteractable = nullptr;
-		return;
-	}
-
-
-	if(HitActor->Implements<UInteractableInterface>())
-	{
-		CurrentInteractable = HitActor;
-	}
-
-}
-
-void AMyCharacter::Interact(const FInputActionValue& Value)
-{
-		if(CurrentInteractable)
-		{
-			IInteractableInterface::Execute_Interact(CurrentInteractable,this);
-		} 
 }
 
 void AMyCharacter::Move(const FInputActionValue& Value)
@@ -134,6 +80,10 @@ void AMyCharacter::StopJump(const FInputActionValue& Value)
 
 void AMyCharacter::StartSprint(const FInputActionValue& Value)
 {
+	if (GetCharacterMovement()->IsFalling())
+	{
+		return;
+	}
 	GetCharacterMovement()->MaxWalkSpeed = GetSprintSpeed();
 }
 
@@ -141,7 +91,13 @@ void AMyCharacter::StopSprint(const FInputActionValue& Value)
 {
 	GetCharacterMovement()->MaxWalkSpeed = GetWalkSpeed();
 }
-
+void AMyCharacter::Interact(const FInputActionValue& Value)
+{
+	if (InteractionComponent)
+	{
+		InteractionComponent->TryInteract();
+	}
+}
 
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

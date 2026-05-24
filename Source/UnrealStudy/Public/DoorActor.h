@@ -26,6 +26,8 @@ public:
 	
 	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
 
+	virtual FText GetInteractText_Implementation() const override;
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "Door")
 	void ReceiveToggleDoor(bool bNewOpenState);
 
