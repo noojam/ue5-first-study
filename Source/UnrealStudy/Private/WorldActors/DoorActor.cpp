@@ -1,4 +1,5 @@
-#include "DoorActor.h"
+#include "WorldActors/DoorActor.h"
+
 #include "Components/StaticMeshComponent.h"
 
 ADoorActor::ADoorActor()

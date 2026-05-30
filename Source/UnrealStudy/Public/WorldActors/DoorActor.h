@@ -2,9 +2,13 @@
 
 #pragma once
 
+//Engine
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "InteractableInterface.h"
+
+//Proj
+#include "Interfaces/InteractableInterface.h"
+
 #include "DoorActor.generated.h"
 
 UCLASS()

@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Headers/ItemData.h"
+
+#include "Datas/ItemData.h"
+
 #include "InventoryComponent.generated.h"
 
 
@@ -14,22 +16,21 @@ class UNREALSTUDY_API UInventoryComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+
 	UInventoryComponent();
 
-	bool AddItem(const FItemData& NewItem);
+	bool AddItem(const FItemData& NewItem, int32 Count = 1);
+
+	const TArray<FInventorySlot>& GetSlots() const { return Slots; }
 
 protected:
-	// Called when the game starts
+
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	TArray<FItemData> Items;
+	TArray<FInventorySlot> Slots;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 	int32 MaxInventorySize = 20;

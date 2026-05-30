@@ -5,8 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "InteractionComponent.h"
+
+#include "Components/InteractionComponent.h"
+#include "Components/InventoryComponent.h"
+
 #include "MyCharacter.generated.h"
+
+class UInventoryWidget;
 
 UCLASS()
 class UNREALSTUDY_API AMyCharacter : public ACharacter
@@ -35,9 +40,11 @@ public:
 	void StartSprint(const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
+	void ToggleInventory();
 	void CheckInteractable();
 	float GetSprintSpeed() const { return SprintSpeed; }
 	float GetWalkSpeed() const { return WalkSpeed; }
+	void RefreshInventoryWidget();
 
 	UFUNCTION(BlueprintCallable)
 	UInteractionComponent* GetCurrentInteractionComponent() const { return InteractionComponent; }
@@ -65,6 +72,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputAction* InteractAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	class UInputAction* InventoryAction;
+
 	UPROPERTY(EditAnywhere, Category = "Speed")
 	float WalkSpeed = 300.f;
 
@@ -76,4 +86,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	TObjectPtr<UInteractionComponent> InteractionComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UInventoryComponent> InventoryComponent;
+
+	UPROPERTY(EditAnywhere, Category="UI")
+	TSubclassOf<UInventoryWidget> InventoryWidgetClass;
+
+	UPROPERTY()
+	TObjectPtr<UInventoryWidget> InventoryWidget;
+
+	bool bInventoryOpen = false;
 };

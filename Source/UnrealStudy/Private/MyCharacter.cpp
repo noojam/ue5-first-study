@@ -2,6 +2,7 @@
 
 
 #include "MyCharacter.h"
+
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -10,7 +11,12 @@
 #include "EnhancedInputComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "InteractableInterface.h"
+#include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
+
+#include "Interfaces/InteractableInterface.h"
+#include "UI/InventoryWidget.h"
+
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -25,7 +31,7 @@ AMyCharacter::AMyCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
-
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +40,25 @@ void AMyCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	GetCharacterMovement()->JumpZVelocity = JumpVelocity;
+
+	if (InventoryWidgetClass)
+	{
+		InventoryWidget =
+			CreateWidget<UInventoryWidget>(
+				GetWorld(),
+				InventoryWidgetClass);
+
+		if (InventoryWidget)
+		{
+			InventoryWidget->AddToViewport();
+			InventoryWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+			InventoryWidget->SetInventoryComponent(
+				InventoryComponent);
+
+			InventoryWidget->RefreshInventory();
+		}
+	}
 }
 
 void AMyCharacter::Tick(float DeltaTime)
@@ -99,6 +124,44 @@ void AMyCharacter::Interact(const FInputActionValue& Value)
 	}
 }
 
+void AMyCharacter::ToggleInventory()
+{
+	if (!InventoryWidget)
+	{
+		return;
+	}
+
+	bInventoryOpen = !bInventoryOpen;
+
+	APlayerController* PlayerController = Cast<APlayerController>(Controller);
+	if (PlayerController)
+	{
+		PlayerController->bShowMouseCursor = bInventoryOpen;
+
+		if (bInventoryOpen)
+		{
+			UGameplayStatics::SetGamePaused(GetWorld(), true);
+			PlayerController->SetInputMode(FInputModeGameAndUI());
+			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
+			RefreshInventoryWidget();
+		}
+		else
+		{
+			UGameplayStatics::SetGamePaused(GetWorld(), false);
+			PlayerController->SetInputMode(FInputModeGameOnly());
+			InventoryWidget->SetVisibility(ESlateVisibility::Collapsed);
+		}
+	}
+}
+
+void AMyCharacter::RefreshInventoryWidget()
+{
+	if (InventoryWidget)
+	{
+		InventoryWidget->RefreshInventory();
+	}
+}
+
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -109,6 +172,9 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	if(EnhancedInputComponent)
 	{
+		EnhancedInputComponent->BindAction
+		(InventoryAction, ETriggerEvent::Started, this, &AMyCharacter::ToggleInventory);
+
 		EnhancedInputComponent->BindAction
 		(MoveAction, ETriggerEvent::Triggered, this, &AMyCharacter::Move);
 

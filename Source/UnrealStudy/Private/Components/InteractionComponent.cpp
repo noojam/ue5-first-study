@@ -1,8 +1,11 @@
-#include "InteractionComponent.h"
-#include "InteractableInterface.h"
+#include "Components/InteractionComponent.h"
+
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetSystemLibrary.h"
+
+#include "Interfaces/InteractableInterface.h"
+
 
 UInteractionComponent::UInteractionComponent()
 {
