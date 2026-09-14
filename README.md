@@ -8,6 +8,12 @@
 - 상호작용
 - 머터리얼, 포스트 프로세싱
 
+
+
+https://github.com/user-attachments/assets/7fd7be01-5a96-472a-a1aa-fcfbfe96d673
+
+
+
 ## 추후 개발할 것
 
 - 공격하는 적
